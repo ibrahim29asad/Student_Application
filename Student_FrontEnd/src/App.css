@@ -1,0 +1,163 @@
+body {
+    
+  
+  
+  background: black;
+  
+  
+  
+}
+
+
+.MainBox{
+    display: block;
+    height: fit-content;
+    width: fit-content;
+    text-align: center;
+    margin-left: 7rem;
+    margin-right: 7rem;
+    
+
+    color: blue;
+    font-size: 1.3rem;
+    /* border: 1px solid; */
+    border-color: azure; 
+    display: block; */
+       
+}
+
+.SearchBox {
+  display: flex;                 /* ✅ Use Flexbox */
+  justify-content: center;      /* ✅ Center horizontally */
+  align-items: center;          /* ✅ Center vertically */
+  gap: 0.5rem;                    /* Space between input and button */
+  border: 1px solid azure;
+  height: 3rem;
+  color: pink;
+  background-color: rgb(65, 34, 39);
+}
+
+
+.DisplayBox{
+    color: cadetblue;
+
+    /* border: 1px solid;
+    border-color: azure; /* To make the boarder colour different */
+    /* display: block;  */
+    
+    margin-top: 1rem;
+    
+    /* background-color: yellowgreen; */
+}
+/* Style the search input */
+.search-input {
+  
+  font-size: 1rem;
+  background-color: antiquewhite;
+  color: black;
+}
+
+/* Style the button */
+.addBtn {
+  color: black;
+  background-color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.6rem;
+}
+.addBtn:hover{
+    transition: 0.3s;
+    background-color: rgb(93, 243, 47);
+}
+.studentTable{
+    width: 36rem;
+    border-collapse: collapse;
+}
+.studentTable th{
+    border: 1px solid;
+    border-color: rgb(255, 255, 255);
+    line-height: 2rem;
+    text-align: center;
+    font-weight: bold;
+    font-size: small;
+    background-color: rgb(78, 29, 90);
+
+}
+.studentTable td{
+    border: 1px solid;
+    border-color: rgb(255, 255, 255);
+    line-height: 2.5rem;
+    text-align: center;
+}
+.studentTable tr{
+    font-size: 0.8rem;
+    text-align: center;
+}
+.studentTable tr:nth-child(even){
+    background-color: rgb(66, 1, 2);
+}
+
+.delBtn, .editBtn  {
+  color: black;
+  background-color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.6rem;
+}
+.editBtn:hover{
+    transition: 1s;
+    background-color: rgb(222, 192, 75);
+}
+.delBtn:hover{
+    transition: 1s;
+    background-color: rgb(255, 0, 0);
+}
+.AddModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(128, 128, 128, 0.5); /* semi-transparent grey */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* high to overlay page */
+}
+
+/* Centered popup box */
+.AddModalPopup {
+  background-color: black;
+  padding: 1rem;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.AddModalPopupContent{
+    text-align: center;
+    height: 2rem;
+    width: 20rem;
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+    border: 2px solid green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.Addbtn  {
+  color: black;
+  background-color: rgb(128, 238, 128);
+  padding: 0.5rem 1rem;
+  font-size: 0.6rem;
+  margin-right: 1rem;
+}
+.closebtn  {
+  color: black;
+  background-color: rgb(204, 49, 49);
+  padding: 0.5rem 1rem;
+  font-size: 0.6rem;
+}
+

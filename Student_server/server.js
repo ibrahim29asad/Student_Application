@@ -40,4 +40,53 @@ pool.connect((err, client) => {
     }
 });
 
+// Grab ALL the Data Now Code 200
+app.get("/students", (req,res) =>{
+    const sql = "SELECT * FROM student";
+    pool.query(sql, (err, result) => {
+    if (err) return res.json(err);
+    return res.status(200).json(result.rows)
+    })
+})
 
+//Grabs Certain Data - if Student ID Matches Code 200
+app.get("/students/:studentID", (req,res) =>{
+    const StuID = Number(req.params.studentID)
+    
+    const sql = "SELECT * FROM student WHERE studentid = $1";
+    pool.query(sql, [StuID], (err, result) => {
+    if (err) return res.json(err);
+    return res.status(200).json(result.rows[0])
+    })
+})
+
+// Posts Certain Data CODE 201
+app.post("/students", (req,res) =>{
+    const {name,major,email} = req.body;
+    const sql = "INSERT INTO student (name,major,email) VALUES ($1, $2, $3) RETURNING *";
+    pool.query(sql, [name,major,email], (err, result) => {
+    if (err) return res.json(err);
+    return res.status(201).json(result.rows)
+    })
+})
+
+// Patch Certain Data Update
+app.patch("/students/:studentID", (req,res) =>{
+    const StuID = Number(req.params.studentID)
+    const {name,major,email} = req.body;
+    const sql = "UPDATE student SET name = $1, major = $2, email = $3 WHERE studentid = $4 ";
+    pool.query(sql, [name,major,email, StuID], (err, result) => {
+    if (err) return res.json(err);
+    return res.status(200).send(`Student ${StuID} has been Updated`);
+    })
+})
+
+// Delete
+app.delete("/students/:studentID", (req,res) =>{
+    const StuID = Number(req.params.studentID)
+    const sql = "DELETE FROM student WHERE studentid = $1";
+    pool.query(sql, [StuID], (err, result) => {
+    if (err) return res.json(err);
+    return res.status(200).send(`Student ${StuID} has been Removed`);
+    })
+})

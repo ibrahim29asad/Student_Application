@@ -9,6 +9,7 @@ function App() {
   const [filterStudents, setfilterStudents] = useState([]);
   const [isModalOpen, setisModalOpen] = useState(false);
   const [StudentData, setStudentData] = useState({name:"",major:"",email:""});
+  const [ErrorMsg, setErrorMsg] = useState("");
 
   const AddPopup = ()=>{
     setisModalOpen(true);
@@ -16,6 +17,7 @@ function App() {
   const ClosePopup = ()=>{
     setisModalOpen(false);
     setStudentData({ name: "", major: "", email: "" });
+    setErrorMsg("");
   }
   const getAllStudents = () => {
     axios.get("http://localhost:3000/students").then((res) =>{
@@ -41,25 +43,37 @@ function App() {
   const HandleUpdate = (student) => {
     setStudentData(student);
     setisModalOpen(true);
-    
+  }
+  const HandleDelete = (studentid) => {
+    axios.delete(`http://localhost:3000/students/${studentid}`).then((res) =>{
+      console.log(res.data);
+      getAllStudents();
+    })
   }
 
   const AddingStudents = async(e) => {
     // Stopping it from reloading until I am done
     e.preventDefault();
-    if(StudentData.studentid){
+
+    if(!StudentData.name || !StudentData.major || !StudentData.email){
+      setErrorMsg("All Values were not filled");
+      return
+    }
+
+    if((ErrorMsg.length == 0)  && StudentData.studentid){
       await axios.patch(`http://localhost:3000/students/${StudentData.studentid}`, StudentData).then((res) =>{
       console.log(res.data);
-      setisModalOpen(false);
       getAllStudents();
     })
     }
-    else{
+    else if ((ErrorMsg.length == 0)  && !StudentData.studentid){
     await axios.post("http://localhost:3000/students", StudentData).then((res) =>{
       console.log(res.data);
-      setisModalOpen(false);
       getAllStudents();
     })
+    }
+    if(ErrorMsg.length == 0){
+      ClosePopup();
     }
 
 
@@ -84,7 +98,10 @@ function App() {
         {isModalOpen && (
   <div className="AddModalOverlay">
     <div className="AddModalPopup">
-      <div className="AddModalPopupContent">Student Information</div>
+      <div className="AddModalPopupContent">
+        {ErrorMsg? "All Values not Filled":"Student Information"}
+      </div>
+
       <div className="AddModalPopupContent">
         <input className="search-input" type="text" value={StudentData.name} onChange={HandleStudentData} name="name" id ="Name" placeholder="Name" />
       </div>
@@ -120,7 +137,7 @@ function App() {
                 <td>{student.major}</td>
                 <td>{student.email}</td>
                 <td><button className='editBtn' onClick={() => HandleUpdate(student)}> Edit</button></td>
-                <td><button className='delBtn'> Del</button></td>
+                <td><button className='delBtn'  onClick={() => HandleDelete(student.studentid)}> Del</button></td>
               </tr>)
 
             })}

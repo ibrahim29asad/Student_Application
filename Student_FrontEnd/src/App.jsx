@@ -18,6 +18,7 @@ function App() {
     setisModalOpen(false);
     setStudentData({ name: "", major: "", email: "" });
     setErrorMsg("");
+    console.log("dasufhgasdobou ousadhf osahdfgojk ouh");
   }
   const getAllStudents = () => {
     axios.get("http://localhost:3000/students").then((res) =>{

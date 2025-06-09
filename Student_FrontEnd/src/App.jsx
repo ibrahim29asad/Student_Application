@@ -52,6 +52,9 @@ function App() {
     })
   }
 
+
+  
+
   const AddingStudents = async(e) => {
     // Stopping it from reloading until I am done
     e.preventDefault();

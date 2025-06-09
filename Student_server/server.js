@@ -4,13 +4,54 @@ const postgresPool = require('pg').Pool;
 const app = express();
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3000; // Default port is 3000 but it can be overridden by an environment variable
-
+const { body, param, validationResult } = require('express-validator');
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ 
     extended: true 
 }));
+
+
+// Validation middleware
+const validate = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  next();
+};
+
+// Student validation rules
+const studentValidationRules = [
+  body('name')
+    .trim()
+    .notEmpty().withMessage('Name is required')
+    .isLength({ min: 2 }).withMessage('Name must be at least 2 characters'),
+    
+  body('major')
+    .trim()
+    .notEmpty().withMessage('Major is required')
+    .isLength({ min: 3 }).withMessage('Major must be longer than 2 characters'),
+    
+  body('email')
+    .trim()
+    .notEmpty().withMessage('Email is required')
+    .isEmail().withMessage('Must be a valid email')
+    .normalizeEmail()
+];
+
+// ID validation rule
+const idValidationRule = [
+  param('studentID')
+    .isInt({ min: 1 }).withMessage('Student ID must be a positive integer')
+    .toInt()
+];
+
+
+
+
+
 app.listen(port, (err) => {
     if (err) {
         console.error('Error starting the server:', err);
@@ -61,7 +102,10 @@ app.get("/students/:studentID", (req,res) =>{
 })
 
 // Posts Certain Data CODE 201
-app.post("/students", (req,res) =>{
+app.post("/students", 
+    validate,
+    studentValidationRules,
+    (req,res) =>{
     const {name,major,email} = req.body;
     const sql = "INSERT INTO student (name,major,email) VALUES ($1, $2, $3) RETURNING *";
     pool.query(sql, [name,major,email], (err, result) => {
@@ -71,7 +115,11 @@ app.post("/students", (req,res) =>{
 })
 
 // Patch Certain Data Update
-app.patch("/students/:studentID", (req,res) =>{
+app.patch("/students/:studentID", 
+    idValidationRule,
+    studentValidationRules,
+    validate,
+    (req,res) =>{
     const StuID = Number(req.params.studentID)
     const {name,major,email} = req.body;
     const sql = "UPDATE student SET name = $1, major = $2, email = $3 WHERE studentid = $4 ";
